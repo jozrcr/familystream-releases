@@ -15,4 +15,4 @@ Une fois installée, l'application propose elle-même les nouvelles versions au 
 
 ## Licence
 
-Versions modifiées de [Nuvio TV](https://github.com/NuvioMedia/NuvioTV), [Nuvio Mobile](https://github.com/NuvioMedia/NuvioMobile) et [Nuvio Desktop](https://github.com/NuvioMedia/NuvioDesktop), distribuées sous licence GPL-3.0 (voir `LICENSE`). Le code source de chaque version est joint à celle-ci ; les archives décrivent les modifications (`FORK.md` / `FAMILY.md`).
+Versions modifiées de [Nuvio TV](https://github.com/NuvioMedia/NuvioTV), [Nuvio Mobile](https://github.com/NuvioMedia/NuvioMobile) et [Nuvio Desktop](https://github.com/NuvioMedia/NuvioDesktop), distribuées sous licence GPL-3.0 (voir `LICENSE`). Le code source de chaque version est joint à celle-ci ; `FORK.md` dans chaque archive décrit les modifications.
