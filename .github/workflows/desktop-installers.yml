@@ -60,7 +60,18 @@ jobs:
 
       - name: Local properties
         shell: bash
-        run: echo "sdk.dir=$(cygpath -m "$ANDROID_HOME")" > local.properties
+        env:
+          TRAKT_CLIENT_ID: ${{ secrets.TRAKT_CLIENT_ID }}
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: |
+          # The Trakt app ID and the TMDB key are built into the app, as in the TV APK.
+          # Without these secrets, Trakt and TMDB stay off in the PC app.
+          {
+            echo "sdk.dir=$(cygpath -m "$ANDROID_HOME")"
+            echo "TRAKT_CLIENT_ID=$TRAKT_CLIENT_ID"
+            echo "TRAKT_REDIRECT_URI=http://localhost"
+            echo "TMDB_API_KEY=$TMDB_API_KEY"
+          } > local.properties
 
       - name: Install WebView2 SDK
         shell: pwsh
@@ -128,7 +139,16 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
 
       - name: Local properties
-        run: echo "sdk.dir=$ANDROID_HOME" > local.properties
+        env:
+          TRAKT_CLIENT_ID: ${{ secrets.TRAKT_CLIENT_ID }}
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: |
+          {
+            echo "sdk.dir=$ANDROID_HOME"
+            echo "TRAKT_CLIENT_ID=$TRAKT_CLIENT_ID"
+            echo "TRAKT_REDIRECT_URI=http://localhost"
+            echo "TMDB_API_KEY=$TMDB_API_KEY"
+          } > local.properties
 
       - name: Build DMG (unsigned)
         env:
