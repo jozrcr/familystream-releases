@@ -6,7 +6,7 @@ Compter 15 minutes sur une TV, 5 minutes sur un ordinateur. Il faut :
 - votre téléphone (pour la TV) ;
 - votre compte **Stremio** (adresse e-mail et mot de passe).
 
-Sur ordinateur ou tablette, aller directement à [la partie ordinateur](#sur-un-ordinateur-windows-ou-mac).
+Sur ordinateur ou tablette, aller directement à [la partie ordinateur](#sur-un-ordinateur-windows-ou-mac) ([Linux](#sur-linux-ubuntu-debian-mint)).
 
 > **Astuce clavier :** taper avec la télécommande est lent. Sur le téléphone, l'appli **Google Home** (ou **Google TV**) a une télécommande avec une icône **clavier** : ce que vous tapez sur le téléphone s'écrit sur la TV. Le téléphone doit être sur le même Wi-Fi que la TV.
 
@@ -64,6 +64,24 @@ C'est prêt.
 
 Ensuite tout marche comme sur la TV : le grand bouton ▶, l'épisode suivant ou précédent (⏮ ⏭ dans le lecteur, ou **Maj+P** / **Maj+N** au clavier). Les mises à jour se proposent toutes seules.
 
+## Sur Linux (Ubuntu, Debian, Mint…)
+
+Il faut une distribution récente : Ubuntu 24.04 ou plus, Debian 13, Linux Mint 22.
+
+1. Télécharger [familystream-pc-linux-x86_64.deb](https://github.com/jozrcr/familystream-releases/releases/latest/download/familystream-pc-linux-x86_64.deb).
+2. Installer : double-cliquer sur le fichier puis **Installer** (mot de passe de l'ordinateur). Ou dans un terminal, depuis le dossier Téléchargements :
+
+   ```
+   sudo apt install ./familystream-pc-linux-x86_64.deb
+   ```
+
+   Le lecteur vidéo (libmpv2) et les autres bibliothèques nécessaires s'installent avec.
+3. Ouvrir **Nuvio** depuis le menu des applications : même premier démarrage que sur Windows (import Stremio).
+
+Les mises à jour : Nuvio télécharge la nouvelle version et ouvre l'installateur, il reste à cliquer sur **Installer**.
+
+**Autres distributions** : [familystream-pc-linux-x86_64.AppImage](https://github.com/jozrcr/familystream-releases/releases/latest/download/familystream-pc-linux-x86_64.AppImage). Installer d'abord **libmpv** (paquet `libmpv2` ou `mpv-libs` selon la distribution), puis rendre le fichier exécutable (clic droit → Propriétés → Autoriser l'exécution, ou `chmod +x`) et l'ouvrir. Ses mises à jour se font toutes seules.
+
 ## Sur une tablette Android
 
 Depuis le navigateur de la tablette, ouvrir [familystream-tablet-arm64-v8a.apk](https://github.com/jozrcr/familystream-releases/releases/latest/download/familystream-tablet-arm64-v8a.apk), puis ouvrir le fichier téléchargé et autoriser l'installation (même principe qu'à l'étape 2 sur la TV). Ensuite, comme sur ordinateur : Nuvio démarre directement et propose **Importer depuis Stremio**.
@@ -115,7 +133,7 @@ Chaque version contient :
 
 - l'application pour TV et boîtiers Android : `familystream.apk` (tous appareils), `arm64-v8a` (Shield et la plupart des appareils récents) ou `armeabi-v7a` (appareils 32 bits) ;
 - l'application pour tablettes Android : `familystream-tablet-arm64-v8a.apk` (la plupart des tablettes) ;
-- l'application pour PC : `familystream-pc-windows-x64.msi` (Windows) ou `familystream-pc-macos-arm64.dmg` / `-x86_64.dmg` (Mac récent / ancien) ;
+- l'application pour PC : `familystream-pc-windows-x64.msi` (Windows), `familystream-pc-macos-arm64.dmg` / `-x86_64.dmg` (Mac récent / ancien) ou `familystream-pc-linux-x86_64.deb` / `.AppImage` (Linux) ;
 - le code source correspondant (`*-source.tar.gz`).
 
 Les installateurs PC sont construits ici par GitHub Actions (onglet *Actions*, « PC installers »).
