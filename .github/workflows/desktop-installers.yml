@@ -1,5 +1,5 @@
-# Builds the family PC app (familystream-desktop, a modified Nuvio Desktop) into Windows and Mac
-# installers and adds them to a family release. Started by familystream-desktop's
+# Builds the family PC app (familystream-desktop, a modified Nuvio Desktop) into Windows, Mac and
+# Linux installers and adds them to a family release. Started by familystream-desktop's
 # scripts/family-release.sh. The source is private: it's checked out with a read-only deploy key
 # (secret DESKTOP_DEPLOY_KEY); its GPL source archive is attached to the release by that script.
 name: PC installers
@@ -13,6 +13,11 @@ on:
       ref:
         description: Tag or branch of familystream-desktop to build (pc-<version>)
         required: true
+      platforms:
+        description: Which installers to build (all for a release; one to add or redo it)
+        type: choice
+        options: [all, windows, macos, linux]
+        default: all
 
 permissions:
   contents: write
@@ -27,6 +32,7 @@ env:
 jobs:
   windows:
     name: Windows x64
+    if: inputs.platforms == 'all' || inputs.platforms == 'windows'
     runs-on: windows-2022
     env:
       WEBVIEW2_VERSION: 1.0.4078.44
@@ -105,6 +111,7 @@ jobs:
 
   macos:
     name: macOS ${{ matrix.arch }}
+    if: inputs.platforms == 'all' || inputs.platforms == 'macos'
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -171,3 +178,79 @@ jobs:
           [[ -f "$dmg" ]] || { echo "No DMG was produced" >&2; exit 1; }
           cp "$dmg" "familystream-pc-macos-${{ matrix.arch }}.dmg"
           gh release upload "$FAMILY_VERSION" "familystream-pc-macos-${{ matrix.arch }}.dmg" --clobber --repo "$GITHUB_REPOSITORY"
+
+  # A .deb (Ubuntu, Debian, Mint: it pulls libmpv2 and the other libraries it needs) and an
+  # AppImage (other distributions: needs libmpv2 installed). Built on Ubuntu 24.04 like upstream's,
+  # so it needs glibc 2.39 or newer. The in-app updater takes the format the PC was installed with.
+  linux:
+    name: Linux x64
+    if: inputs.platforms == 'all' || inputs.platforms == 'linux'
+    runs-on: ubuntu-24.04
+    env:
+      # Upstream Nuvio Desktop's pinned appimagetool.
+      APPIMAGE_TOOL_VERSION: 1.9.1
+      APPIMAGETOOL_SHA256: ed4ce84f0d9caff66f50bcca6ff6f35aae54ce8135408b3fa33abfc3cb384eb0
+    steps:
+      - name: Check out the family PC app
+        uses: actions/checkout@v4
+        with:
+          repository: jozrcr/familystream-desktop
+          ref: ${{ inputs.ref }}
+          ssh-key: ${{ secrets.DESKTOP_DEPLOY_KEY }}
+          lfs: false
+
+      - name: Versions
+        run: scripts/ci-versions.sh >> "$GITHUB_ENV"
+
+      - name: Build dependencies (mpv, GTK, WebKit headers for the native player bridges)
+        run: bash ./scripts/linux/install-desktop-build-dependencies.sh fakeroot
+
+      - name: appimagetool
+        run: |
+          tool="$RUNNER_TEMP/appimagetool-x86_64.AppImage"
+          curl -fsSL -o "$tool" "https://github.com/AppImage/appimagetool/releases/download/$APPIMAGE_TOOL_VERSION/appimagetool-x86_64.AppImage"
+          echo "$APPIMAGETOOL_SHA256  $tool" | sha256sum -c -
+          chmod +x "$tool"
+          echo "APPIMAGETOOL=$tool" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Local properties
+        env:
+          TRAKT_CLIENT_ID: ${{ secrets.TRAKT_CLIENT_ID }}
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: |
+          {
+            echo "sdk.dir=$ANDROID_HOME"
+            echo "TRAKT_CLIENT_ID=$TRAKT_CLIENT_ID"
+            echo "TRAKT_REDIRECT_URI=http://localhost"
+            echo "TMDB_API_KEY=$TMDB_API_KEY"
+          } > local.properties
+
+      - name: Build DEB and AppImage
+        run: |
+          ./gradlew :composeApp:packageReleaseDeb :composeApp:packageReleaseAppImage \
+            "-Pnuvio.desktop.versionName=$FAMILY_VERSION" \
+            "-Pnuvio.desktop.versionCode=$FAMILY_VERSION_CODE" \
+            "-Pnuvio.desktop.packageVersion=$FAMILY_PACKAGE_VERSION" \
+            -Pcompose.desktop.packaging.checkJdkVendor=false \
+            --no-configuration-cache --no-daemon --stacktrace
+
+      - name: Add to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          deb="$(ls composeApp/build/compose/binaries/main-release/deb/*.deb | head -1)"
+          appimage="$(ls composeApp/build/compose/release-appimages/*.AppImage | head -1)"
+          [[ -f "$deb" && -f "$appimage" ]] || { echo "The DEB or the AppImage was not produced" >&2; exit 1; }
+          cp "$deb" familystream-pc-linux-x86_64.deb
+          cp "$appimage" familystream-pc-linux-x86_64.AppImage
+          chmod +x familystream-pc-linux-x86_64.AppImage
+          dpkg-deb --field familystream-pc-linux-x86_64.deb Package Version Depends
+          gh release upload "$FAMILY_VERSION" familystream-pc-linux-x86_64.deb familystream-pc-linux-x86_64.AppImage \
+            --clobber --repo "$GITHUB_REPOSITORY"
