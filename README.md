@@ -4,9 +4,9 @@ Compter 15 minutes sur une TV, 5 minutes sur un ordinateur. Il faut :
 
 - la TV (Android TV, Google TV, Nvidia Shield, Chromecast avec Google TV, Fire TV…) ou l'ordinateur ;
 - votre téléphone (pour la TV) ;
-- votre compte **Stremio** (adresse e-mail et mot de passe).
+- **l'un des trois** : votre compte **Stremio** (adresse e-mail et mot de passe), **ou** votre compte **debrid** (Premiumize, Real-Debrid, AllDebrid ou TorBox), **ou** un **code d'invitation** reçu par message (il commence par `FS1-`).
 
-Sur ordinateur ou tablette, aller directement à [la partie ordinateur](#sur-un-ordinateur-windows-ou-mac) ([Linux](#sur-linux-ubuntu-debian-mint)).
+Sur ordinateur ou tablette, aller directement à [la partie ordinateur](#sur-un-ordinateur-windows-ou-mac) ([Linux](#sur-linux-ubuntu-debian-mint)), ou à [l'installation express](#installation-express-sur-ordinateur) en une commande.
 
 > **Astuce clavier :** taper avec la télécommande est lent. Sur le téléphone, l'appli **Google Home** (ou **Google TV**) a une télécommande avec une icône **clavier** : ce que vous tapez sur le téléphone s'écrit sur la TV. Le téléphone doit être sur le même Wi-Fi que la TV.
 
@@ -39,6 +39,11 @@ Sur la TV, ouvrir le **Play Store** (ou l'**Appstore** sur Fire TV), chercher **
    - un QR code s'affiche : le scanner avec l'appareil photo du téléphone ;
    - se connecter à Stremio sur le téléphone et valider ;
    - Nuvio récupère tout : vos films et séries, où vous en étiez, ce que vous avez déjà vu, **et les extensions** qui trouvent les vidéos. Rien d'autre à configurer.
+
+   **Pas de compte Stremio ?** Choisir **Compte debrid ou code d'invitation** :
+   - un QR code s'affiche : le scanner avec le téléphone (sur le même Wi-Fi que la TV) ;
+   - sur la page qui s'ouvre, **soit** choisir votre service debrid, toucher **Trouver ma clé API**, la copier et la coller ; **soit** coller tout le message contenant le code d'invitation ;
+   - **Installer** : la TV vérifie et installe les sources, réglées comme celles de la famille.
 4. « Comment regardez-vous ? » : **Version originale, sous-titres français** est recommandé. Pour regarder en français, choisir **Version française (VF)**. Ça se change ensuite dans **Paramètres → Profils → Langues de ce profil**.
 
 C'est prêt.
@@ -59,8 +64,38 @@ C'est prêt.
      - ouvrir le fichier téléchargé, glisser **Nuvio** dans **Applications** ;
      - ouvrir Nuvio depuis Applications : macOS dit qu'il ne peut pas vérifier l'appli → **Terminé** ;
      - **Réglages Système → Confidentialité et sécurité**, tout en bas : **Ouvrir quand même** → **Ouvrir** (mot de passe du Mac si demandé). Une seule fois.
-3. Ouvrir **Nuvio** : il démarre directement, sans compte à créer, et la fenêtre **Importer depuis Stremio** s'ouvre. **Se connecter à Stremio** : le navigateur s'ouvre, connectez-vous à Stremio et validez. Nuvio récupère vos films et séries, vos reprises, ce que vous avez vu et les extensions.
+3. Ouvrir **Nuvio** : il démarre directement, sans compte à créer, et la fenêtre **Installer des sources** s'ouvre :
+   - **Mon compte Stremio** : le navigateur s'ouvre, connectez-vous à Stremio et validez. Nuvio récupère vos films et séries, vos reprises, ce que vous avez vu et les extensions ;
+   - **Mon compte debrid** : choisir le service, **Trouver ma clé API**, copier la clé et la coller, **Installer** ;
+   - **Un code d'invitation** : coller tout le message reçu, **Installer**.
 4. Langues : **VO avec sous-titres français** par défaut. Pour changer : **Paramètres → Lecture → Langues de ce profil**.
+
+### Installation express sur ordinateur
+
+Une seule commande à copier-coller, qui télécharge et installe la dernière version (sans les avertissements du navigateur) :
+
+- **Windows** : ouvrir le menu Démarrer, taper **PowerShell**, l'ouvrir, puis coller :
+
+  ```
+  irm https://raw.githubusercontent.com/jozrcr/familystream-releases/main/install/windows.ps1 | iex
+  ```
+
+  Windows demande l'autorisation : **Oui**.
+- **Mac** : ouvrir l'app **Terminal** (Applications → Utilitaires), puis coller :
+
+  ```
+  curl -fsSL https://raw.githubusercontent.com/jozrcr/familystream-releases/main/install/macos.sh | bash
+  ```
+
+- **Linux** : dans un terminal :
+
+  ```
+  curl -fsSL https://raw.githubusercontent.com/jozrcr/familystream-releases/main/install/linux.sh | bash
+  ```
+
+  Le mot de passe de l'ordinateur est demandé (Ubuntu, Debian, Mint) ; ailleurs, Nuvio s'installe dans le dossier Applications de votre compte.
+
+Ensuite, même premier démarrage qu'à l'étape 3.
 
 Ensuite tout marche comme sur la TV : le grand bouton ▶, l'épisode suivant ou précédent (⏮ ⏭ dans le lecteur, ou **Maj+P** / **Maj+N** au clavier). Les mises à jour se proposent toutes seules.
 
@@ -84,7 +119,7 @@ Les mises à jour : Nuvio télécharge la nouvelle version et ouvre l'installate
 
 ## Sur une tablette Android
 
-Depuis le navigateur de la tablette, ouvrir [familystream-tablet-arm64-v8a.apk](https://github.com/jozrcr/familystream-releases/releases/latest/download/familystream-tablet-arm64-v8a.apk), puis ouvrir le fichier téléchargé et autoriser l'installation (même principe qu'à l'étape 2 sur la TV). Ensuite, comme sur ordinateur : Nuvio démarre directement et propose **Importer depuis Stremio**.
+Depuis le navigateur de la tablette, ouvrir [familystream-tablet-arm64-v8a.apk](https://github.com/jozrcr/familystream-releases/releases/latest/download/familystream-tablet-arm64-v8a.apk), puis ouvrir le fichier téléchargé et autoriser l'installation (même principe qu'à l'étape 2 sur la TV). Ensuite, comme sur ordinateur : Nuvio démarre directement et propose **Installer des sources** (Stremio, compte debrid ou code d'invitation).
 
 ## Au quotidien
 
@@ -104,6 +139,15 @@ Avec un compte **Trakt** (gratuit, sur trakt.tv), Nuvio retient où vous en ête
 
 À faire après l'import Stremio, de préférence, et d'abord sur la TV. Votre liste (bibliothèque) reste propre à chaque écran : c'est l'import Stremio qui la remplit.
 
+## Inviter un ami
+
+Pour qu'un ami ait les mêmes sources que vous, **sans** votre historique ni Trakt :
+
+- **Sur ordinateur ou tablette** : **Paramètres → Contenu et découverte → Inviter un ami** : décocher ce que vous ne voulez pas partager, **Copier le code**, et le coller dans un message privé à votre ami.
+- **Sur la TV** : **Paramètres → Profils → Inviter un ami** : scanner le QR code avec votre téléphone, puis envoyer le texte obtenu à votre ami par message privé.
+
+Le code contient vos clés (debrid, abonnements) : envoyez-le seulement à des personnes de confiance, jamais sur un groupe ou un réseau social. Votre ami installe Nuvio comme ci-dessus et colle le code au premier démarrage. Il peut aussi utiliser **son propre compte debrid** à la place : rien à lui envoyer, sauf le lien de cette page.
+
 ## Les mises à jour
 
 Quand une nouvelle version sort, un bandeau **« Mise à jour disponible »** apparaît en haut de l'écran d'accueil, avec **Télécharger** déjà sélectionné : appuyer sur **OK**, puis **Installer**. La première fois, Android demande d'autoriser Nuvio à installer des applis : même manipulation qu'à l'étape 2.
@@ -120,7 +164,7 @@ Si les lèvres ne sont pas synchronisées avec le son, régler **« Délai audio
 ## En cas de souci
 
 - **D'abord : Paramètres → À propos → État de Nuvio.** Chaque ligne devrait être verte ; sinon, lisez-moi ce qui est écrit (on y voit aussi la version installée).
-- **Aucune vidéo ne se lance, ou « aucune source »** : regarder l'État de Nuvio, puis appelez-moi. Il faut sans doute vérifier les extensions du compte Stremio.
+- **Aucune vidéo ne se lance, ou « aucune source »** : regarder l'État de Nuvio, puis appelez-moi. Il faut sans doute vérifier les extensions (sources). Pour les réinstaller : **Paramètres → Profils → Installer des sources** (TV) ou **Paramètres → Contenu et découverte → Installer des sources** (ordinateur).
 - **Une vidéo ne marche pas** : pendant la lecture, le bouton **Sources** du lecteur propose en haut un autre choix automatique, sinon toute la liste.
 - **Sous-titres décalés** : dans le menu sous-titres du lecteur, essayer un autre fichier de sous-titres.
 - **Couleurs ternes ou délavées, ou son Dolby Atmos mal rendu** : **Paramètres → Profils → Choix automatique de la source**. HDR : **Sans HDR** (par défaut, **Auto** écarte déjà le HDR si la TV ne l'affiche pas). Dolby Atmos : **Sans Atmos**.
